@@ -1,0 +1,6 @@
+/* content.css — styles injected alongside content.js
+   Scope all selectors tightly to avoid conflicts with page styles. */
+
+#__ext_toast__ {
+  /* Managed via inline styles in content.js for portability */
+}

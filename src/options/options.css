@@ -1,0 +1,12 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: #1e1e2e; color: #cdd6f4; padding: 32px; }
+.container { max-width: 480px; display: flex; flex-direction: column; gap: 20px; }
+h1 { font-size: 22px; color: #cba6f7; }
+.toggle-row { display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
+#save-btn {
+  align-self: flex-start; padding: 8px 20px; border: none; border-radius: 6px;
+  background: #cba6f7; color: #1e1e2e; font-weight: 600; cursor: pointer;
+}
+#save-btn:hover { opacity: 0.85; }
+.hidden { display: none; }
+#saved-msg { color: #a6e3a1; font-size: 13px; }

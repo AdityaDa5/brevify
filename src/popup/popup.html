@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Brevify</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+  <div class="container main-page">
+    <header>
+      <h1>Brevify</h1>
+    </header>
+    <main>
+      <!-- <p id="status">Ready</p> -->
+      <button id="action-btn">
+        Analyze
+
+        <svg class="settings-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
+          viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z" />
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+        </svg>
+      </button>
+      <br />
+      <div class="history-header">
+        <h3>History</h3>
+        <button class="delete-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18" />
+            <path d="M8 6V4h8v2" />
+            <path d="M19 6l-1 14H6L5 6" />
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+          </svg>
+        </button>
+      </div>
+      <ul class="responsive-table">
+        <li class="table-header">
+          <div class="col col-1">Date</div>
+          <div class="col col2-header">Website</div>
+          <div class="col col3-header">Summary</div>
+        </li>
+        <div class="table-body"></div>
+      </ul>
+    </main>
+  </div>
+  <div class="container summary-page hidden">
+    <button class="back-btn">
+      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+        width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="m15 19-7-7 7-7" />
+      </svg>
+    </button>
+    <div class="history-header">
+      <h3>Summary</h3>
+      <img class="favicon summaryWebUrl" src="https://www.google.com/s2/favicons?domain=wikipedia.org&sz=32" />
+    </div>
+    <div class="summary-title"></div>
+    <div class="summary-body"></div>
+  </div>
+  <div class="container settings-page hidden">
+    <button class="back-btn">
+      <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+        width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="m15 19-7-7 7-7" />
+      </svg>
+    </button>
+    <div class="history-header">
+      <h3>Settings</h3>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Extract top N% sentences</span>
+      <div class="number-toggle">
+        <button id="decrease-btn">−</button>
+        <span id="sent-size">5</span>
+        <button id="increase-btn">+</button>
+      </div>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Auto inject summaries into webpage</span>
+      <div class="checkbox-wrapper-51">
+        <input type="checkbox" id="cbx-51" class="auto-inject-checkbox" />
+        <label for="cbx-51" class="toggle">
+          <span>
+            <svg width="10px" height="10px" viewBox="0 0 10 10">
+              <path
+                d="M5,1 L5,1 C2.790861,1 1,2.790861 1,5 L1,5 C1,7.209139 2.790861,9 5,9 L5,9 C7.209139,9 9,7.209139 9,5 L9,5 C9,2.790861 7.209139,1 5,1 L5,9 L5,1 Z">
+              </path>
+            </svg>
+          </span>
+        </label>
+      </div>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Delete history periodically</span>
+      <div class="checkbox-wrapper-51">
+        <input type="checkbox" id="cbx-51-autodelete" class="delete-periodically-checkbox" />
+        <label for="cbx-51-autodelete" class="toggle">
+          <span>
+            <svg width="10px" height="10px" viewBox="0 0 10 10">
+              <path
+                d="M5,1 L5,1 C2.790861,1 1,2.790861 1,5 L1,5 C1,7.209139 2.790861,9 5,9 L5,9 C7.209139,9 9,7.209139 9,5 L9,5 C9,2.790861 7.209139,1 5,1 L5,9 L5,1 Z">
+              </path>
+            </svg>
+          </span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="utils.js"></script>
+  <script type="module" src="popup.js"></script>
+</body>
+
+</html>
