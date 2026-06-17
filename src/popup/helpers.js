@@ -31,21 +31,42 @@ export function createTableRow(rowData) {
 
   const faviconUrl = getFaviconUrl(rowData.webUrl);
 
-  row.innerHTML = `
-    <div class="col col-1" data-label="Date">
-      <span class="date">${rowData.date}</span>
-      <span class="time">${rowData.time}</span>
-    </div>
-     <div class="col col-2 website-col">
-    <img class="favicon" src="${faviconUrl}" />
-  </div> 
-    <div class="col col-3" data-label="Summary">${rowData.summary}</div> 
-  `;
+  const col1 = document.createElement("div");
+  col1.className = "col col-1";
+  col1.setAttribute("data-label", "Date");
+
+  const dateSpan = document.createElement("span");
+  dateSpan.className = "date";
+  dateSpan.textContent = rowData.date;
+
+  const timeSpan = document.createElement("span");
+  timeSpan.className = "time";
+  timeSpan.textContent = rowData.time;
+
+  col1.appendChild(dateSpan);
+  col1.appendChild(timeSpan);
+
+  const col2 = document.createElement("div");
+  col2.className = "col col-2 website-col";
+
+  const faviconImg = document.createElement("img");
+  faviconImg.className = "favicon";
+  faviconImg.setAttribute("src", faviconUrl);
+  faviconImg.setAttribute("alt", "Favicon");
+  col2.appendChild(faviconImg);
+
+  const col3 = document.createElement("div");
+  col3.className = "col col-3";
+  col3.setAttribute("data-label", "Summary");
+  col3.textContent = rowData.summary;
+
+  row.appendChild(col1);
+  row.appendChild(col2);
+  row.appendChild(col3);
 
   row.addEventListener("click", () => onItemClick(rowData));
   return row;
 }
-
 
 export function showPage(pageClass) {
   document.querySelector(".main-page").classList.add("hidden");
@@ -53,7 +74,6 @@ export function showPage(pageClass) {
   document.querySelector(".summary-page").classList.add("hidden");
 
   document.querySelector(pageClass).classList.remove("hidden");
-
 }
 
 function onItemClick(rowData) {
@@ -70,16 +90,19 @@ function onItemClick(rowData) {
     window.open(rowData.webUrl, "_blank");
   });
 
-  document.querySelector(".summary-title").innerHTML = `${rowData.title}`;
+  document.querySelector(".summary-title").textContent = rowData.title;
 
-  const sentencesList = rowData.summary.split("\n").map(sent =>  `<li>${sent}</li>`);
-  const sentences = sentencesList.join("\n");
+  const ulContainer = document.createElement("ul");
+  const sentences = rowData.summary.split("\n");
 
-  document.querySelector(".summary-body").innerHTML =
-    `<ul>
-      ${sentences}
-    </ul>`;
+  sentences.forEach((sent) => {
+    const li = document.createElement("li");
+    li.textContent = sent;
+    ulContainer.appendChild(li);
+  });
+
+  const summaryBody = document.querySelector(".summary-body");
+  summaryBody.replaceChildren(ulContainer);
 
   console.log(rowData);
 }
-

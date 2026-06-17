@@ -1,63 +1,16 @@
 // content.js
 
+import { injectSummaryBanner, setSummary } from "../brevify_core/dom_injectors.js";
+import { isPageSupported } from "../brevify_core/sanity_checkers.js";
+import { generateSummary } from "../brevify_core/summary_generator.js";
+import { getSettings, saveSettings, clearHistory, saveHistory } from "../utils/db.js";
+import { getPageContent } from "./scrapper.js";
+import { createUniqueId } from "../popup/helpers.js";
+
+const ext = typeof browser !== "undefined" ? browser : chrome;
+
 (async () => {
   try {
-    const ext = typeof browser !== "undefined"
-      ? browser
-      : chrome;
-
-      const {
-      injectSummaryBanner,
-      setSummary
-    } = await import(
-      ext.runtime.getURL(
-        "src/brevify_core/dom_injectors.js"
-      )
-    );
-
-    const {
-      isPageSupported
-    } = await import(
-      ext.runtime.getURL(
-        "src/brevify_core/sanity_checkers.js"
-      )
-    );
-
-    const {
-      generateSummary
-    } = await import(
-      ext.runtime.getURL(
-        "src/brevify_core/summary_generator.js"
-      )
-    );
-
-    const {
-      getSettings,
-      saveSettings,
-      clearHistory,
-      saveHistory
-    } = await import(
-      ext.runtime.getURL(
-        "src/utils/db.js"
-      )
-    );
-
-    const {
-      getPageContent
-    } = await import(
-      ext.runtime.getURL(
-        "src/content/scrapper.js"
-      )
-    );
-
-    const {
-      createUniqueId
-    } = await import(
-      ext.runtime.getURL(
-        "src/popup/helpers.js"
-      )
-    );
-
     console.log("[Brevify] Content script loaded");
 
     // ==============================
@@ -68,33 +21,23 @@
       (message, sender, sendResponse) => {
 
         if (message.action === "getPageContent") {
-
           sendResponse(getPageContent());
-
           return true;
         }
 
         if (message.action === "startAnalysis") {
-
           (async () => {
-
             try {
+              const pageContent = getPageContent();
+              const settings = await getSettings();
+              const summary = generateSummary(
+                pageContent.fullText,
+                settings.topNSentences
+              );
 
-              const pageContent =
-                getPageContent();
-
-              const settings =
-                await getSettings();
-
-              const summary =
-                generateSummary(
-                  pageContent.fullText,
-                  settings.topNSentences
-                );
-
-                const summaryText = summary.join("\n");
-                const webUrl = window.location.href;
-                const title = pageContent.title;
+              const summaryText = summary.join("\n");
+              const webUrl = window.location.href;
+              const title = pageContent.title;
 
               sendResponse({
                 title,
@@ -103,14 +46,11 @@
               });
 
             } catch (error) {
-
               console.error(error);
-
               sendResponse({
                 error: error.message
               });
             }
-
           })();
 
           return true;
@@ -124,8 +64,7 @@
     // Auto Delete History
     // ==============================
 
-    const settings =
-      await getSettings();
+    const settings = await getSettings();
 
     if (
       settings.autoDeleteHistory &&
@@ -158,18 +97,16 @@
       "[Brevify] Injecting summary..."
     );
 
-    if(!injectSummaryBanner()) {
+    if (!injectSummaryBanner()) {
       return;
-    };
+    }
 
-    const pageContent =
-      getPageContent();
+    const pageContent = getPageContent();
 
-    const summary =
-      generateSummary(
-        pageContent.fullText,
-        settings.topNSentences
-      );
+    const summary = generateSummary(
+      pageContent.fullText,
+      settings.topNSentences
+    );
 
     setSummary(summary);
 
@@ -207,7 +144,6 @@
     console.log("[Brevify] Added to history");
 
   } catch (error) {
-
     console.error(
       "[Brevify] Content Script Error:",
       error

@@ -20,137 +20,145 @@ export function injectSummaryBanner() {
     "#ffffff";
 
   const borderWrapper = document.createElement("div");
-
   borderWrapper.id = "__brevify_border";
 
-  borderWrapper.innerHTML = `
-    <div
-      id="__brevify_banner"
-      style="--brevify-bg:${pageBg};"
-    >
-      <div class="brevify-border-animation">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+  // Create main banner container
+  const banner = document.createElement("div");
+  banner.id = "__brevify_banner";
+  banner.style.setProperty("--brevify-bg", pageBg);
 
-      <div class="brevify-header">
+  // Create border animation wrapper and its spans
+  const animationWrapper = document.createElement("div");
+  animationWrapper.className = "brevify-border-animation";
+  for (let i = 0; i < 4; i++) {
+    const span = document.createElement("span");
+    animationWrapper.appendChild(span);
+  }
+  banner.appendChild(animationWrapper);
 
-        <div class="brevify-title">
-          Summary by
-          <span class="brevify-brand">
-            Brevify
-          </span>
-        </div>
+  // Create header
+  const header = document.createElement("div");
+  header.className = "brevify-header";
 
-        <div class="brevify-controls">
-          <button
-            id="__brevify_toggle"
-            class="brevify-toggle hidden"
-            aria-label="Expand Summary"
-          >
-            <svg
-              class="chevron-down"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M6 9L12 15L18 9"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+  // Header Title
+  const titleDiv = document.createElement("div");
+  titleDiv.className = "brevify-title";
+  titleDiv.appendChild(document.createTextNode("Summary by "));
+  
+  const brandSpan = document.createElement("span");
+  brandSpan.className = "brevify-brand";
+  brandSpan.textContent = "Brevify";
+  titleDiv.appendChild(brandSpan);
+  header.appendChild(titleDiv);
 
-            <svg
-              class="chevron-up hidden"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M18 15L12 9L6 15"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
+  // Controls Container
+  const controlsDiv = document.createElement("div");
+  controlsDiv.className = "brevify-controls";
 
-          <button
-            id="__brevify_dismiss"
-            class="brevify-dismiss"
-            aria-label="Dismiss Summary"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M18 6L6 18M6 6L18 18"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
+  // SVG Helper Function for Name-spaced attributes
+  const createSvgEl = (type, attrs) => {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", type);
+    for (const [key, val] of Object.entries(attrs)) {
+      el.setAttribute(key, val);
+    }
+    return el;
+  };
 
-      </div>
+  // Toggle Button
+  const toggleBtn = document.createElement("button");
+  toggleBtn.id = "__brevify_toggle";
+  toggleBtn.className = "brevify-toggle hidden";
+  toggleBtn.setAttribute("aria-label", "Expand Summary");
 
-      <div
-        id="__brevify_content"
-        class="brevify-content hidden"
-      >
-      </div>
+  // Chevron Down SVG
+  const chevronDown = createSvgEl("svg", {
+    class: "chevron-down",
+    width: "20",
+    height: "20",
+    viewBox: "0 0 24 24",
+    fill: "none"
+  });
+  const pathDown = createSvgEl("path", {
+    d: "M6 9L12 15L18 9",
+    stroke: "currentColor",
+    "stroke-width": "2.5",
+    "stroke-linecap": "round",
+    "stroke-linejoin": "round"
+  });
+  chevronDown.appendChild(pathDown);
+  toggleBtn.appendChild(chevronDown);
 
-      <div
-        id="__brevify_footer"
-        class="brevify-footer hidden"
-      >
-        Summaries generated using TextRank
-      </div>
+  // Chevron Up SVG
+  const chevronUp = createSvgEl("svg", {
+    class: "chevron-up hidden",
+    width: "20",
+    height: "20",
+    viewBox: "0 0 24 24",
+    fill: "none"
+  });
+  const pathUp = createSvgEl("path", {
+    d: "M18 15L12 9L6 15",
+    stroke: "currentColor",
+    "stroke-width": "2.5",
+    "stroke-linecap": "round",
+    "stroke-linejoin": "round"
+  });
+  chevronUp.appendChild(pathUp);
+  toggleBtn.appendChild(chevronUp);
+  controlsDiv.appendChild(toggleBtn);
 
-    </div>
-  `;
+  // Dismiss Button
+  const dismissBtn = document.createElement("button");
+  dismissBtn.id = "__brevify_dismiss";
+  dismissBtn.className = "brevify-dismiss";
+  dismissBtn.setAttribute("aria-label", "Dismiss Summary");
 
+  // Dismiss SVG
+  const dismissSvg = createSvgEl("svg", {
+    width: "20",
+    height: "20",
+    viewBox: "0 0 24 24",
+    fill: "none"
+  });
+  const dismissPath = createSvgEl("path", {
+    d: "M18 6L6 18M6 6L18 18",
+    stroke: "currentColor",
+    "stroke-width": "2.5",
+    "stroke-linecap": "round",
+    "stroke-linejoin": "round"
+  });
+  dismissSvg.appendChild(dismissPath);
+  dismissBtn.appendChild(dismissSvg);
+  controlsDiv.appendChild(dismissBtn);
+
+  header.appendChild(controlsDiv);
+  banner.appendChild(header);
+
+  // Content Container
+  const contentDiv = document.createElement("div");
+  contentDiv.id = "__brevify_content";
+  contentDiv.className = "brevify-content hidden";
+  banner.appendChild(contentDiv);
+
+  // Footer Container
+  const footerDiv = document.createElement("div");
+  footerDiv.id = "__brevify_footer";
+  footerDiv.className = "brevify-footer hidden";
+  footerDiv.textContent = "Summaries generated using TextRank";
+  banner.appendChild(footerDiv);
+
+  borderWrapper.appendChild(banner);
   document.body.prepend(borderWrapper);
 
   bannerWrapper = borderWrapper;
+  contentContainer = contentDiv;
+  expandButton = toggleBtn;
+  footerContainer = footerDiv;
 
-  contentContainer =
-    document.getElementById("__brevify_content");
-
-  expandButton =
-    document.getElementById("__brevify_toggle");
-
-  footerContainer =
-    document.getElementById("__brevify_footer");
-
-  const dismissButton =
-    document.getElementById("__brevify_dismiss");
-
-  expandButton.addEventListener(
-    "click",
-    toggleSummary
-  );
-
-  dismissButton.addEventListener(
-    "click",
-    dismissBanner
-  );
+  expandButton.addEventListener("click", toggleSummary);
+  dismissBtn.addEventListener("click", dismissBanner);
 
   return true;
-
 }
 
 export function setSummary(summary) {
@@ -158,19 +166,15 @@ export function setSummary(summary) {
     return;
   }
 
-  const summaryArray = Array.isArray(summary)
-    ? summary
-    : [summary];
+  const summaryArray = Array.isArray(summary) ? summary : [summary];
 
-  contentContainer.innerHTML = "";
+  // Securely purge content using replaceChildren
+  contentContainer.replaceChildren();
 
   summaryArray.forEach((sentence) => {
     const p = document.createElement("p");
-
     p.className = "brevify-sentence";
-
     p.textContent = sentence;
-
     contentContainer.appendChild(p);
   });
 
@@ -178,44 +182,20 @@ export function setSummary(summary) {
 }
 
 function toggleSummary() {
-  const collapsed =
-    contentContainer.classList.contains(
-      "hidden"
-    );
+  const collapsed = contentContainer.classList.contains("hidden");
 
-  const downIcon =
-    expandButton.querySelector(
-      ".chevron-down"
-    );
-
-  const upIcon =
-    expandButton.querySelector(
-      ".chevron-up"
-    );
+  const downIcon = expandButton.querySelector(".chevron-down");
+  const upIcon = expandButton.querySelector(".chevron-up");
 
   if (collapsed) {
-    contentContainer.classList.remove(
-      "hidden"
-    );
-
-    footerContainer.classList.remove(
-      "hidden"
-    );
-
+    contentContainer.classList.remove("hidden");
+    footerContainer.classList.remove("hidden");
     downIcon.classList.add("hidden");
-
     upIcon.classList.remove("hidden");
   } else {
-    contentContainer.classList.add(
-      "hidden"
-    );
-
-    footerContainer.classList.add(
-      "hidden"
-    );
-
+    contentContainer.classList.add("hidden");
+    footerContainer.classList.add("hidden");
     upIcon.classList.add("hidden");
-
     downIcon.classList.remove("hidden");
   }
 }
@@ -223,7 +203,7 @@ function toggleSummary() {
 function dismissBanner() {
   if (bannerWrapper) {
     bannerWrapper.style.animation = "brevify-slide-up 0.3s ease-out forwards";
-    
+
     setTimeout(() => {
       bannerWrapper.remove();
       bannerWrapper = null;
@@ -235,19 +215,12 @@ function dismissBanner() {
 }
 
 function injectStyles() {
-  if (
-    document.getElementById(
-      "__brevify_styles"
-    )
-  ) {
+  if (document.getElementById("__brevify_styles")) {
     return;
   }
 
-  const style =
-    document.createElement("style");
-
+  const style = document.createElement("style");
   style.id = "__brevify_styles";
-
   style.textContent = `
   
 @keyframes brevify-slide-up {
