@@ -11,6 +11,8 @@
 
 #### A lightweight browser extension that delivers instant extractive summaries right where you need them.
 
+[![Get the add-on for Firefox](https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png)](https://addons.mozilla.org/firefox/addon/brevify/)
+
 ## ✨ Features
 
 - 📝 **Extractive Summaries** - Get accurate, context-preserving summaries of webpage content using advanced TextRank algorithm

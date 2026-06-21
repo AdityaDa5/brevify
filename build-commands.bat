@@ -1,0 +1,1 @@
+esbuild src/content/content.js --bundle --outfile=dist/content.js
